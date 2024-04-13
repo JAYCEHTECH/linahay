@@ -901,7 +901,7 @@ def paystack_webhook(request):
 @login_required(login_url='login')
 def history(request):
     user_transactions = models.IShareBundleTransaction.objects.filter(user=request.user).order_by(
-        'transaction_date').reverse()
+        'transaction_date').reverse()[:1000]
     header = "AirtelTigo Transactions"
     net = "tigo"
     context = {'txns': user_transactions, "header": header, "net": net}
@@ -910,7 +910,7 @@ def history(request):
 
 @login_required(login_url='login')
 def mtn_history(request):
-    user_transactions = models.MTNTransaction.objects.filter(user=request.user).order_by('transaction_date').reverse()
+    user_transactions = models.MTNTransaction.objects.filter(user=request.user).order_by('transaction_date').reverse()[:1000]
     header = "MTN Transactions"
     net = "mtn"
     context = {'txns': user_transactions, "header": header, "net": net}
