@@ -50,14 +50,14 @@ INSTALLED_APPS = [
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Noble Data GH",
-    "site_header": "Noble Data GH",
+    "site_title": "LinaHay",
+    "site_header": "LinaHay",
     # "site_logo": "img/site/bestPay Logo.png",
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "Noble Data GH",
-    "copyright": "Noble Data GH",
+    "site_brand": "LinaHay",
+    "copyright": "LinaHay",
     # "login_logo": "img/site/bp.png",
-    "welcome_sign": "Welcome to the Noble Data GH Admin",
+    "welcome_sign": "Welcome to the LinaHay Admin",
     "custom_css": 'css/admin.css',
     "user_avatar": 'user',
 }
