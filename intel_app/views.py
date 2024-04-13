@@ -978,12 +978,11 @@ def change_excel_status(request, status, to_change_to):
                 'sender_id': 'Noble Data',
                 'message': sms_message
             }
-            try:
-                response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
-                print(response.text)
-            except:
-                messages.success(request, f"Transaction Completed")
-                return redirect('mtn_admin', status=status)
+            response1 = requests.get(
+                f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{transaction_number}&from=Linahay&sms={sms_message}")
+            print(response1.text)
+            messages.success(request, f"Transaction Completed")
+            return redirect('mtn_admin', status=status)
         else:
             messages.success(request, f"Status changed from {status} to {to_change_to}")
             return redirect("mtn_admin", status=status)
