@@ -1108,7 +1108,7 @@ def at_mark_as_sent(request, pk):
         }
 
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{txn.user.phone}&from=GEO_AT&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{txn.user.phone}&from=Linahay&sms={sms_message}")
         print(response1.text)
         # try:
         #     response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
@@ -1176,7 +1176,7 @@ def mark_as_sent(request, pk):
         }
 
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{txn.user.phone}&from=GEO_AT&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{txn.user.phone}&from=Linahay&sms={sms_message}")
         print(response1.text)
         # try:
         #     response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
@@ -1405,7 +1405,7 @@ def credit_user_from_list(request, reference):
         }
 
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{custom_user.phone}&from=GEO_AT&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{custom_user.phone}&from=Linahay&sms={sms_message}")
         print(response1.text)
         # try:
         #     response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
