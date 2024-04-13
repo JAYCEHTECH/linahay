@@ -29,9 +29,8 @@ SECRET_KEY = "DGFYUGEUGFEFE"
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'www.nobledatagh.com',
-    'noble-rjta3.ondigitalocean.app',
-    '127.0.0.1'
+    '127.0.0.1',
+    'linahay-hkbrl.ondigitalocean.app'
 ]
 
 
