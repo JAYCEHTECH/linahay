@@ -67,6 +67,8 @@
 
 <script>
 
+  let ref = $(".reference").val()
+
 $("body").on('click', '.pay-with-wallet', function(e){
     let firstBtn = $(".paystack-btn")
     let secondBtn = $(".pay-with-wallet")
@@ -80,6 +82,7 @@ $("body").on('click', '.pay-with-wallet', function(e){
 
     console.log("yes")
     e.preventDefault()
+    console.log(ref)
 
   let token = $("input[name=csrfmiddlewaretoken]").val();
     let amount = $(".mtn-offer").val()
