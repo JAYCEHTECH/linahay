@@ -68,11 +68,6 @@
 
 {% block scripts %}
 <script>
-  const paymentForm = document.getElementById('tigoPaymentForm');
-  let email = $(".email").val()
-  let ref = $(".reference").val()
-  console.log(email + ref)
-
 
   $("body").on('click', '.pay-with-wallet', function(e){
     let firstBtn = $(".paystack-btn")
