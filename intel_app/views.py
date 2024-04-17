@@ -961,39 +961,41 @@ def change_excel_status(request, status, to_change_to):
 
     if to_change_to == "Completed":
         # Only get the first 10 transactions if changing to "Completed"
-        transactions = transactions.order_by('transaction_date')[:10]
+        transactions = models.MTNTransaction.objects.filter(transaction_status="Processing").order_by('transaction_date')[:10]
+        print(len(transactions))
 
-    for transaction in transactions:
-        print("cooooooollllllllllllllddddddddddddd")
-        transaction.transaction_status = to_change_to
-        transaction.save()
-        if to_change_to == "Completed":
-            transaction_number = transaction.user.phone
-            sms_headers = {
-                'Authorization': 'Bearer 1050|VDqcCUHwCBEbjcMk32cbdOhCFlavpDhy6vfgM4jU',
-                'Content-Type': 'application/json'
-            }
+        for transaction in transactions:
+            print("cooooooollllllllllllllddddddddddddd")
+            transaction.transaction_status = to_change_to
+            transaction.save()
+            if to_change_to == "Completed":
+                transaction_number = transaction.user.phone
+                sms_headers = {
+                    'Authorization': 'Bearer 1050|VDqcCUHwCBEbjcMk32cbdOhCFlavpDhy6vfgM4jU',
+                    'Content-Type': 'application/json'
+                }
 
-            sms_url = 'https://webapp.usmsgh.com/api/sms/send'
-            sms_message = f"Your MTN transaction has been completed. {transaction.bundle_number} has been credited with {transaction.offer}.\nTransaction Reference: {transaction.reference}"
+                sms_url = 'https://webapp.usmsgh.com/api/sms/send'
+                sms_message = f"Your MTN transaction has been completed. {transaction.bundle_number} has been credited with {transaction.offer}.\nTransaction Reference: {transaction.reference}"
 
-            sms_body = {
-                'recipient': f"233{transaction_number}",
-                'sender_id': 'Noble Data',
-                'message': sms_message
-            }
-            try:
-                response1 = requests.get(
-                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{transaction_number}&from=Linahay&sms={sms_message}")
-                print(response1.text)
-            except:
+                sms_body = {
+                    'recipient': f"233{transaction_number}",
+                    'sender_id': 'Noble Data',
+                    'message': sms_message
+                }
+                try:
+                    response1 = requests.get(
+                        f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{transaction_number}&from=Linahay&sms={sms_message}")
+                    print(response1.text)
+                except:
+                    messages.success(request, f"Transaction Completed")
+                    return redirect('mtn_admin', status=status)
                 messages.success(request, f"Transaction Completed")
-                return redirect('mtn_admin', status=status)
-            messages.success(request, f"Transaction Completed")
-            return redirect('mtn_admin', status=status)
-        else:
-            messages.success(request, f"Status changed from {status} to {to_change_to}")
-            return redirect("mtn_admin", status=status)
+            else:
+                messages.success(request, f"Status changed from {status} to {to_change_to}")
+                return redirect("mtn_admin", status=status)
+        return redirect('mtn_admin', status=status)
+
     messages.success(request, f"Status changed from {status} to {to_change_to}")
     return redirect("mtn_admin", status=status)
 
