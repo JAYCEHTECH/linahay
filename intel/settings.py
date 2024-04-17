@@ -30,7 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'linahay-hkbrl.ondigitalocean.app'
+    'linahay-hkbrl.ondigitalocean.app',
+    'https://www.linahay.com/'
 ]
 
 
