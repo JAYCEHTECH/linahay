@@ -957,10 +957,14 @@ def verify_transaction(request, reference):
 
 
 def change_excel_status(request, status, to_change_to):
-    transactions = models.MTNTransaction.objects.filter(
-        transaction_status=status) if to_change_to != "Completed" else models.MTNTransaction.objects.filter(
-        transaction_status=status).order_by('transaction_date')[:10]
+    transactions = models.MTNTransaction.objects.filter(transaction_status=status)
+
+    if to_change_to == "Completed":
+        # Only get the first 10 transactions if changing to "Completed"
+        transactions = transactions.order_by('transaction_date')[:10]
+
     for transaction in transactions:
+        print("cooooooollllllllllllllddddddddddddd")
         transaction.transaction_status = to_change_to
         transaction.save()
         if to_change_to == "Completed":
@@ -978,9 +982,13 @@ def change_excel_status(request, status, to_change_to):
                 'sender_id': 'Noble Data',
                 'message': sms_message
             }
-            response1 = requests.get(
-                f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{transaction_number}&from=Linahay&sms={sms_message}")
-            print(response1.text)
+            try:
+                response1 = requests.get(
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=SE5WaUJLZWRHTURtUlNyUVNpb24&to=0{transaction_number}&from=Linahay&sms={sms_message}")
+                print(response1.text)
+            except:
+                messages.success(request, f"Transaction Completed")
+                return redirect('mtn_admin', status=status)
             messages.success(request, f"Transaction Completed")
             return redirect('mtn_admin', status=status)
         else:
@@ -1023,7 +1031,7 @@ def admin_mtn_history(request, status):
 
             for record in queryset:
                 # Assuming 'bundle_number' and 'offer' fields exist in your model
-                recipient_value = str(record.bundle_number)  # Ensure it's a string to preserve formatting
+                recipient_value = f"0{record.bundle_number}"  # Ensure it's a string to preserve formatting
                 data_value = record.offer  # Adjust based on actual field type
                 cleaned_data_value = float(data_value.replace('MB', ''))
                 data_value_gb = round(float(cleaned_data_value) / 1000, 2)
