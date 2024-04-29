@@ -27,6 +27,11 @@
             <a href="{% url 'credit_user' %}" class="nav-link">Credit User</a>
           </li>
           {% endif %}
+                    {% if request.user.creditor %}
+          <li class="nav-item">
+            <a href="{% url 'merchant_crediting' %}" class="nav-link">Merchant Crediting</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a href="{% url 'logout' %}" class="nav-link">Log out</a>
           </li>

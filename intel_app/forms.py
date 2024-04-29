@@ -58,6 +58,12 @@ class CreditUserForm(forms.Form):
     amount = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'GHS 100'}))
 
 
+class MerchantCreditUserForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=models.CustomUser.objects.all().order_by('username'), to_field_name='username', empty_label=None,
+                                  widget=forms.Select(attrs={'class': 'form-control airtime-input'}))
+    amount = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'GHS 100'}))
+
+
 class BigTimeBundleForm(forms.Form):
     phone_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control phone', 'placeholder': '0270000000'}))
     offers = forms.ModelChoiceField(queryset=models.BigTimeBundlePrice.objects.all().order_by('price'), to_field_name='price', empty_label=None,

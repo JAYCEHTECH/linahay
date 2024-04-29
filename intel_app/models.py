@@ -19,6 +19,9 @@ class CustomUser(AbstractUser):
         ("Super Agent", "Super Agent")
     )
     status = models.CharField(max_length=250, null=False, blank=False, choices=choices, default="User")
+    creditor = models.BooleanField(default=False)
+    creditor_api_key = models.CharField(max_length=250, null=True, blank=True)
+    creditor_user_id = models.CharField(max_length=250, null=True, blank=True)
     password1 = models.CharField(max_length=100, null=False, blank=False)
     password2 = models.CharField(max_length=100, null=False, blank=False)
 
@@ -125,7 +128,7 @@ class MTNTransaction(models.Model):
         ("Completed", "Completed"),
         ("Failed", "Failed")
     )
-    transaction_status = models.CharField(max_length=100, choices=choices, default="Pending")
+    transaction_status = models.CharField(max_length=100, choices=choices, default="Completed")
     description = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):

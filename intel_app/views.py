@@ -318,6 +318,23 @@ def mtn_pay_with_wallet(request):
         else:
             bundle = models.MTNBundlePrice.objects.get(price=float(amount)).bundle_volume
 
+        url = "https://merchant.cloudhubgh.com/api/initiate_mtn"
+
+        payload = json.dumps({
+            "receiver": str(phone_number),
+            "data_volume": int(bundle),
+            "reference": reference,
+            "amount": "10"
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': config("BEARER_TOKEN"),
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        print(response.text)
+
         print(bundle)
         sms_message = f"An order has been placed. {bundle}MB for {phone_number}"
         new_mtn_transaction = models.MTNTransaction.objects.create(
@@ -898,7 +915,8 @@ def history(request):
 
 @login_required(login_url='login')
 def mtn_history(request):
-    user_transactions = models.MTNTransaction.objects.filter(user=request.user).order_by('transaction_date').reverse()[:1000]
+    user_transactions = models.MTNTransaction.objects.filter(user=request.user).order_by('transaction_date').reverse()[
+                        :1000]
     header = "MTN Transactions"
     net = "mtn"
     context = {'txns': user_transactions, "header": header, "net": net}
@@ -949,7 +967,8 @@ def change_excel_status(request, status, to_change_to):
 
     if to_change_to == "Completed":
         # Only get the first 10 transactions if changing to "Completed"
-        transactions = models.MTNTransaction.objects.filter(transaction_status="Processing").order_by('transaction_date')[:10]
+        transactions = models.MTNTransaction.objects.filter(transaction_status="Processing").order_by(
+            'transaction_date')[:10]
         print(len(transactions))
 
         for transaction in transactions:
@@ -1341,7 +1360,8 @@ def topup_info(request):
         }
         # response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
         # print(response.text)
-        messages.success(request, f"Your Request has been sent successfully. Kindly go on to pay to {admin} and use the reference stated as reference. Reference: {reference}")
+        messages.success(request,
+                         f"Your Request has been sent successfully. Kindly go on to pay to {admin} and use the reference stated as reference. Reference: {reference}")
         return redirect("request_successful", reference)
     return render(request, "layouts/topup-info.html")
 
@@ -1701,3 +1721,45 @@ def hubtel_webhook(request):
     else:
         print("not post")
         return JsonResponse({'message': 'Not Found'}, status=404)
+
+
+@login_required(login_url='login')
+def merchant_crediting(request):
+    if request.user.is_authenticated:
+        userrr = models.CustomUser.objects.get(id=request.user.id)
+        if userrr.creditor:
+            form = forms.CreditUserForm()
+            if request.method == "POST":
+                form = forms.CreditUserForm(request.POST)
+                if form.is_valid():
+                    user = form.cleaned_data["user"]
+                    amount = form.cleaned_data["amount"]
+                    print(user)
+                    print(amount)
+                    user_needed = models.CustomUser.objects.get(username=user)
+                    if user_needed.wallet is None:
+                        old_user_wallet = user.wallet
+                        user_needed.wallet = amount
+                        user_needed.save()
+                        new_user_wallet = user_needed.wallet
+                    else:
+                        old_user_wallet = user.wallet
+                        user_needed.wallet += float(amount)
+                        userrr.wallet -= float(amount)
+                        userrr.save()
+                        user_needed.save()
+                        new_user_wallet = user_needed.wallet
+
+                    print(user_needed.username)
+                    messages.success(request, f"Wallet Crediting Successful. Old balance was: {old_user_wallet}. New wallet balance for {user} is {new_user_wallet}")
+                    return redirect('merchant_crediting')
+            context = {'form': form}
+            return render(request, "layouts/merchant_crediting.html", context=context)
+        else:
+            messages.success(request, "Access Denied")
+            return redirect('home')
+    else:
+        messages.success(request, "Access Denied")
+        return redirect('home')
+
+

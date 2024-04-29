@@ -41,6 +41,8 @@ urlpatterns = [
     path('credit/<str:reference>', views.credit_user_from_list, name='credit'),
     path('paystack_webhook', views.paystack_webhook, name='paystack_webhook'),
 
+    path('services/elevated/merchant_crediting', views.merchant_crediting, name='merchant_crediting'),
+
     path('login', authViews.login_page, name='login'),
     path('signup', authViews.sign_up, name='signup'),
     path('logout', authViews.logout_user, name="logout")

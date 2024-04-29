@@ -14,7 +14,7 @@ class CustomUserAdmin(ExportActionMixin, UserAdmin):
             'Other Personal info',
             {
                 'fields': (
-                    'phone', 'wallet', 'status'
+                    'phone', 'wallet', 'status', 'creditor', 'creditor_api_key', 'creditor_user_id'
                 )
             }
         )
