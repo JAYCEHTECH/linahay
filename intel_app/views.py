@@ -1370,7 +1370,7 @@ def topup_info(request):
 @login_required(login_url='login')
 def request_successful(request, reference):
     admin = models.AdminInfo.objects.filter().first()
-    all_admins = models.AdminInfo.objects.all()[1:]
+    all_admins = models.AdminInfo.objects.all()
     context = {
         "name": admin.name,
         "number": f"0{admin.momo_number}",
