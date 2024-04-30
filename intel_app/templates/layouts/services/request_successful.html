@@ -28,26 +28,17 @@
     <div class="page-section" id="services">
       <div class="container">
           <div class="text-center">
-              <h2 class="title-section">Pay to the account below and Get Your Wallet Recharged</h2>
+              <h2 class="title-section">Contact any of these creditors to get your wallet topped up</h2>
               <div class="divider mx-auto"></div>
           </div>
 
+         {% for admin in all_admins %}
         <form action="" method="post">
           {% csrf_token %}
             <div class="row">
           <div class="form-group col-md-6">
-                <label>Number to pay to:</label>
-                <input disabled  value="{{number}}" class="form-control" >
-          </div>
-          <div class="form-group col-md-6">
-                <label>Account Name:</label>
-                <input disabled  value="{{name}}" class="form-control" >
-          </div>
-                </div>
-            <div class="row">
-          <div class="form-group col-md-6">
-                <label>Channel:</label>
-                <input disabled  value="{{channel}}" class="form-control" >
+                <label>Creditor Number:</label>
+                <input disabled  value="{{admin.phone_number}}" class="form-control" >
           </div>
           <div class="form-group col-md-6">
                 <label>Reference to use in payment:</label>
@@ -55,6 +46,8 @@
           </div>
                 </div>
         </form>
+          <hr class="my-1">
+          {% endif %}
 
       </div>
   </div> <!-- .page-section -->
