@@ -324,6 +324,7 @@ def mtn_pay_with_wallet(request):
             "receiver": str(phone_number),
             "data_volume": int(bundle),
             "reference": reference,
+            "phone_number": str(user.phone),
             "amount": "10"
         })
         headers = {
