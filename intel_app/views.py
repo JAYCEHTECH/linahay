@@ -1373,11 +1373,13 @@ def topup_info(request):
 @login_required(login_url='login')
 def request_successful(request, reference):
     admin = models.AdminInfo.objects.filter().first()
+    all_admins = models.AdminInfo.objects.all()
     context = {
         "name": admin.name,
         "number": f"0{admin.momo_number}",
         "channel": admin.payment_channel,
-        "reference": reference
+        "reference": reference,
+        "all_admins": all_admins
     }
     return render(request, "layouts/services/request_successful.html", context=context)
 
@@ -1396,7 +1398,7 @@ def topup_list(request):
 
 @login_required(login_url='login')
 def credit_user_from_list(request, reference):
-    if request.user.is_superuser:
+    if request.user.is_superuser or request.user.creditor:
         crediting = models.TopUpRequest.objects.filter(reference=reference).first()
         if crediting.status:
             return redirect('topup_list')
@@ -1407,6 +1409,9 @@ def credit_user_from_list(request, reference):
         print(user.phone)
         print(amount)
         custom_user.wallet += amount
+        if request.user.creditor:
+            request.user.wallet -= amount
+            request.user.save()
         custom_user.save()
         crediting.status = True
         crediting.credited_at = datetime.now()
